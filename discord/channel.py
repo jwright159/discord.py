@@ -87,6 +87,7 @@ if TYPE_CHECKING:
         GroupDMChannel as GroupChannelPayload,
     )
     from .types.snowflake import SnowflakeList
+    from .types.user import User as UserPayload
 
 
 async def _single_delete_strategy(messages: Iterable[Message]):
@@ -1760,11 +1761,11 @@ class DMChannel(discord.abc.Messageable, Hashable):
         return f'<DMChannel id={self.id} recipient={self.recipient!r}>'
 
     @classmethod
-    def _from_message(cls: Type[DMC], state: ConnectionState, channel_id: int) -> DMC:
+    def _from_message(cls: Type[DMC], state: ConnectionState, channel_id: int, user: UserPayload) -> DMC:
         self: DMC = cls.__new__(cls)
         self._state = state
         self.id = channel_id
-        self.recipient = None
+        self.recipient = state.store_user(user)
         # state.user won't be None here
         self.me = state.user  # type: ignore
         return self
