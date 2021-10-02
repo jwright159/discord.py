@@ -1761,11 +1761,11 @@ class DMChannel(discord.abc.Messageable, Hashable):
         return f'<DMChannel id={self.id} recipient={self.recipient!r}>'
 
     @classmethod
-    def _from_message(cls: Type[DMC], state: ConnectionState, channel_id: int, user: UserPayload) -> DMC:
+    def _from_message(cls: Type[DMC], state: ConnectionState, channel_id: int, user: Optional[UserPayload]) -> DMC:
         self: DMC = cls.__new__(cls)
         self._state = state
         self.id = channel_id
-        self.recipient = state.store_user(user) if 'guild_id' in user or 'author' in user else None
+        self.recipient = state.store_user(user) if user else None
         # state.user won't be None here
         self.me = state.user  # type: ignore
         return self

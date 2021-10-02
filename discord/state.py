@@ -469,7 +469,7 @@ class ConnectionState:
             channel = guild and guild._resolve_channel(channel_id)
         else:
             guild = None
-            channel = DMChannel._from_message(self, channel_id, data['author'])
+            channel = DMChannel._from_message(self, channel_id, data['author'] if 'author' in data else None)
 
         return channel or PartialMessageable(state=self, id=channel_id), guild
 
