@@ -1765,7 +1765,7 @@ class DMChannel(discord.abc.Messageable, Hashable):
         self: DMC = cls.__new__(cls)
         self._state = state
         self.id = channel_id
-        self.recipient = state.store_user(user)
+        self.recipient = state.store_user(user) if 'guild_id' in user or 'author' in user else None
         # state.user won't be None here
         self.me = state.user  # type: ignore
         return self
